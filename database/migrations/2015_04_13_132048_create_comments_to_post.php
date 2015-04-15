@@ -17,6 +17,7 @@ class CreateCommentsToPost extends Migration {
 			$table->increments('id');
 			$table->integer('parent_id');
 			$table->string('body');
+			$table->integer('user_id');
 			$table->timestamps();
 		});
 	}

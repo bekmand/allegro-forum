@@ -21,11 +21,19 @@ Route::get('forum/{post}/comments', [
 ]);
 Route::get('home', 'ForumController@index');
 
+Route::get('user/{current_user}', ['middleware' => 'user',
+    'as' => 'user_edit', 'uses' => 'UserController@index'
+]);
+
 Route::controllers([
     'auth' => 'Auth\AuthController',
     'password' => 'Auth\PasswordController',
 ]);
 
+Route::get('foo', ['middleware' => 'user', function()
+{
+    return 'this page may only be viewed by the correct user';
+}]);
 
 
 /*Post routes*/
@@ -35,5 +43,9 @@ Route::post('/', [
 
 Route::post('forum/{id}/comments', [
     'as' => 'create_comment', 'uses' => 'ForumController@storeComment'
+]);
+
+Route::post('user/{id}', [
+    'as' => 'user_update', 'uses' => 'UserController@userUpdate'
 ]);
 

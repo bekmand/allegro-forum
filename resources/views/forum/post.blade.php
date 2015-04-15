@@ -37,9 +37,10 @@
             {!! Form::close() !!}
             <hr/>
             @foreach($comments as $comment)
-                <article>
+                <div class="col-xs-6 col-lg-4">
+                    <h3>{{ $comment->name }}</h3>
                     <p>{{ $comment->body }}</p>
-                </article>
+                </div>
             @endforeach
         </div>
         <div class="col-md-4">

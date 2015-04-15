@@ -19,6 +19,11 @@
                     <a href="{{ url('/auth/logout') }}">
                         <button type="submit" class="btn btn-default form-control">logout</button>
                     </a>
+                    <a href="{{ route('user_edit', [Auth::user()->id]) }}">
+                        <button type="submit" class="btn btn-default form-control">
+                            <span class="glyphicon glyphicon-cog"></span>
+                        </button>
+                    </a>
                 @else
                     <a href="{{ url('/auth/login') }}">
                         <button class="btn btn-default form-control">login</button>

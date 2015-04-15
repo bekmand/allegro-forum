@@ -5,6 +5,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Post;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Request;
 
 class ForumController extends Controller {
@@ -19,11 +21,9 @@ class ForumController extends Controller {
     public function post($id)
     {
         $post = Post::find($id);
-        $comments = Comment::where('parent_id', '=', $id)->latest('updated_at')->get();
-        $login = false;
-        // return view('post')->with('post_id', $post);
+        $comments = $this->getComments($id);
 
-        return view('forum.post', compact('post'), compact('comments'))->with('login', $login);
+        return view('forum.post', compact('post'), compact('comments'));
     }
 
     //Store Forum posts and Comments to db
@@ -32,7 +32,7 @@ class ForumController extends Controller {
     {
         $input = Request::all();
         $input['published_at'] = Carbon::now();
-
+        $input['user_id'] = Auth::User()->id;
 
         Post::create($input);
 
@@ -45,13 +45,20 @@ class ForumController extends Controller {
     {
         $comment = Request::all();
         $comment['parent_id'] = $id;
+        $comment['user_id'] = \Auth::User()->id;
 
         Comment::create($comment);
 
         $post = Post::find($id);
-        $comments = Comment::where('parent_id', '=', $id)->get();
+        $comments = $this->getComments($id);
 
         return view('forum.post', compact('post'), compact('comments'));
+    }
+
+    public function getComments($id)
+    {
+        return Comment::where('parent_id', '=', $id)
+            ->join('users','user_id', '=', 'users.id')->get();
     }
 
 }

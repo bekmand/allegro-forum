@@ -8,6 +8,7 @@ class Post extends Model {
         'title',
         'body',
         'published_at',
+        'user_id',
     ];
 
 }
